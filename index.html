@@ -344,6 +344,58 @@
   .price-strike { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--text-mute); text-decoration: line-through; margin-left: auto; }
   .price-note { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-mute); margin-top: 8px; letter-spacing: 0.04em; }
   .pricing-buy .btn-primary { margin-top: 32px; padding: 18px 24px; font-size: 15px; justify-content: center; }
+
+  /* Price increase alert */
+  .price-alert {
+    margin-top: 28px;
+    border: 1px solid rgba(255,77,94,0.35);
+    border-radius: 14px;
+    background: linear-gradient(90deg, rgba(255,77,94,0.10), rgba(255,77,94,0.03) 60%, transparent);
+    padding: 20px 24px;
+    display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .price-alert::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--red);
+    animation: pulseBar 1.8s ease-in-out infinite;
+  }
+  @keyframes pulseBar { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .price-alert .siren {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: rgba(255,77,94,0.15); border: 1px solid rgba(255,77,94,0.4);
+    color: var(--red); flex-shrink: 0;
+    animation: sirenSpin 2.4s linear infinite;
+  }
+  @keyframes sirenSpin {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,77,94,0); }
+    50% { box-shadow: 0 0 0 8px rgba(255,77,94,0); box-shadow: 0 0 24px 2px rgba(255,77,94,0.5); }
+  }
+  .price-alert .body { min-width: 0; }
+  .price-alert .body .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--red); text-transform: uppercase; letter-spacing: 0.14em;
+    margin-bottom: 6px;
+  }
+  .price-alert .body .msg {
+    font-size: 15.5px; color: var(--text); line-height: 1.45;
+  }
+  .price-alert .body .msg b { color: var(--text); font-weight: 700; }
+  .price-alert .body .msg .strike { color: var(--text-mute); text-decoration: line-through; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-right: 4px; }
+  .price-alert .body .msg .new { color: var(--red); font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 14px; }
+  .countdown {
+    display: flex; gap: 8px; flex-shrink: 0;
+  }
+  .cd-unit {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border-hi);
+    border-radius: 8px;
+    padding: 8px 10px; min-width: 52px; text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .cd-unit .n { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+  .cd-unit .u { font-size: 9px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
   .secure { margin-top: 16px; display: flex; gap: 14px; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-mute); }
 
   /* Footer */
@@ -570,6 +622,11 @@
     .pillars { grid-template-columns: 1fr; }
     .pillar { border-right: none; border-bottom: 1px solid var(--border); }
     .pricing-info { border-right: none; border-bottom: 1px solid var(--border); }
+    .price-alert { grid-template-columns: 1fr; gap: 16px; padding: 18px 20px; text-align: left; }
+    .price-alert .siren { display: none; }
+    .countdown { justify-content: flex-start; }
+    .cd-unit { min-width: 44px; padding: 6px 8px; }
+    .cd-unit .n { font-size: 17px; }
     .term-body { grid-template-columns: 1fr; min-height: 0; }
     .mc-panel { border-right: none; border-bottom: 1px solid var(--border); padding: 12px 14px; }
     #mcCanvas { height: 220px; flex: 0 0 220px; }
@@ -942,7 +999,7 @@
       <div class="pricing-buy">
         <div class="price-line">
           <div class="price-cur">USD</div>
-          <div class="price-big" style="font-size: 88px;">1,099</div>
+          <div class="price-big" style="font-size: 88px;">699</div>
         </div>
         <div class="price-note">// Pago único · sin recurrencias · acceso vitalicio</div>
         <a href="https://payhip.com/order?link=SgHuf" target="_blank" rel="noopener" class="btn btn-primary">
@@ -955,10 +1012,24 @@
         </div>
       </div>
     </div>
+
+    <div class="price-alert" role="alert">
+      <div class="siren" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+      </div>
+      <div class="body">
+        <div class="tag">// Aviso de incremento de precio</div>
+        <div class="msg">En <b>30 días</b> la formación sube de <span class="strike">$699</span> a <span class="new">USD $800</span>. Asegura tu acceso al precio actual antes de que finalice el contador.</div>
+      </div>
+      <div class="countdown" id="countdown" aria-hidden="true">
+        <div class="cd-unit"><div class="n" id="cdD">30</div><div class="u">Días</div></div>
+        <div class="cd-unit"><div class="n" id="cdH">00</div><div class="u">Hrs</div></div>
+        <div class="cd-unit"><div class="n" id="cdM">00</div><div class="u">Min</div></div>
+        <div class="cd-unit"><div class="n" id="cdS">00</div><div class="u">Seg</div></div>
+      </div>
+    </div>
   </div>
 </section>
-
-<!-- ====================== FINAL CTA ====================== -->
 <section class="cta-final">
   <div class="container">
     <h2>Domina la <span class="it">Probabilidad</span>,<br/>o sigue operando en la <span style="font-style: italic; color: #d96573;">Ilusión</span>.</h2>
@@ -1523,6 +1594,36 @@
   });
   // open first
   wrap.firstElementChild.classList.add('open');
+})();
+
+/* ====================== COUNTDOWN ====================== */
+(function() {
+  const KEY = 'algoMentorshipPriceDeadline_v1';
+  let deadline = parseInt(localStorage.getItem(KEY) || '0', 10);
+  const now = Date.now();
+  if (!deadline || deadline < now) {
+    deadline = now + 30 * 24 * 60 * 60 * 1000;
+    localStorage.setItem(KEY, String(deadline));
+  }
+  const dEl = document.getElementById('cdD');
+  const hEl = document.getElementById('cdH');
+  const mEl = document.getElementById('cdM');
+  const sEl = document.getElementById('cdS');
+  if (!dEl) return;
+  const pad = (n) => String(Math.max(0, n)).padStart(2, '0');
+  function tick() {
+    let diff = Math.max(0, deadline - Date.now());
+    const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+    const h = Math.floor(diff / 3600000); diff -= h * 3600000;
+    const m = Math.floor(diff / 60000); diff -= m * 60000;
+    const s = Math.floor(diff / 1000);
+    dEl.textContent = pad(d);
+    hEl.textContent = pad(h);
+    mEl.textContent = pad(m);
+    sEl.textContent = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
 })();
 
 </script>
